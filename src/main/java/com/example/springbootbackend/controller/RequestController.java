@@ -1,7 +1,7 @@
 package com.example.springbootbackend.controller;
 
 import com.example.springbootbackend.model.Request;
-import com.example.springbootbackend.repository.RequestRepository;
+import com.example.springbootbackend.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +14,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class RequestController {
-    private RequestRepository requestRepository;
+    private RequestService requestService;
 
     @Autowired
-    public RequestController(RequestRepository requestRepository) {
-        this.requestRepository = requestRepository;
+    public RequestController(RequestService requestService) {
+        this.requestService = requestService;
     }
+
 
     @GetMapping("/requests")
     public ResponseEntity<List<Request>> getAllRequests() {
         try {
             List<Request> requests = new ArrayList<>();
-            requests.addAll(requestRepository.findAll());
+            requests.addAll(requestService.findAll());
             if (requests.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -38,7 +39,7 @@ public class RequestController {
     @PostMapping("/requests")
     public ResponseEntity<Request> createRequest(@RequestBody Request request) {
         try {
-            Request requestTemp = requestRepository
+            Request requestTemp = requestService
                     .save(new Request(request.getBanner(), request.getUserAgent(), request.getIpAddress(),
                             request.getDate()));
             return new ResponseEntity<>(requestTemp, HttpStatus.CREATED);

@@ -1,6 +1,5 @@
 package com.example.springbootbackend.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
